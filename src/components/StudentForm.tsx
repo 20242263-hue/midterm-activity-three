@@ -1,3 +1,4 @@
+// components/StudentForm.tsx
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,20 +10,21 @@ interface FormData {
   age: number;
 }
 
+// Validation schema using yup
 const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   email: yup.string().email('Invalid email address').required('Email is required'),
   age: yup.number().positive('Age must be positive').required('Age is required'),
 }).required();
 
-const StudentForm: React.FC = () => {
+interface StudentFormProps {
+  onSubmit: (data: FormData) => void;
+}
+
+const StudentForm: React.FC<StudentFormProps> = ({ onSubmit }) => {
   const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(validationSchema),
   });
-
-  const onSubmit = (data: FormData) => {
-    console.log('Form Data:', data);
-  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
